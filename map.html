@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Create a heatmap layer</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+
+<div id='map'></div>
+
+<script>
+mapboxgl.accessToken = '<Mapbox token>';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/dark-v9',
+    center: [-122.4, 37.8],
+    zoom: 4
+});
+
+map.on('load', function() {
+    // Add a geojson point source.
+    // Heatmap layers also work with a vector tile source.
+    map.addSource('zipcodes', {
+        "type": "geojson",
+        "data": "/data/zipcodes.geojson"
+    });
+
+    map.addLayer({
+        "id": "zipcodes-heat",
+        "type": "heatmap",
+        "source": "zipcodes",
+        "maxzoom": 9,
+        "paint": {
+            // Increase the heatmap weight based on frequency and property count
+            "heatmap-weight": [
+                "interpolate",
+                ["linear"],
+                ["get", "count"],
+                0, 0,
+                30, 1
+            ],
+            // Increase the heatmap color weight weight by zoom level
+            // heatmap-intensity is a multiplier on top of heatmap-weight
+            "heatmap-intensity": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                0, 1,
+                9, 3
+            ],
+            // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+            // Begin color ramp at 0-stop with a 0-transparancy color
+            // to create a blur-like effect.
+            "heatmap-color": [
+                "interpolate",
+                ["linear"],
+                ["heatmap-density"],
+                0, "rgba(33,102,172,0)",
+                0.25, "rgb(0,255,255)",
+                0.5, "rgb(255,255,100)",
+                0.75, "rgb(255,0,0)",
+            ],
+            // Adjust the heatmap radius by zoom level
+            "heatmap-radius": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                0, 20,
+                9, 40
+            ],
+            // Transition from heatmap to circle layer by zoom level
+            "heatmap-opacity": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                7, 1,
+                12, 0
+            ],
+        }
+    });
+
+    map.addLayer({
+        "id": "zipcodes-point",
+        "type": "circle",
+        "source": "zipcodes",
+        "minzoom": 8,
+        "paint": {
+            // Size circle radius by zipcode cound and zoom level
+            "circle-radius": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                7, [
+                    "interpolate",
+                    ["linear"],
+                    ["get", "count"],
+                    1, 1,
+                    6, 4
+                ],
+                16, [
+                    "interpolate",
+                    ["linear"],
+                    ["get", "count"],
+                    1, 5,
+                    6, 50
+                ]
+            ],
+            // Color circle by zipcode cound
+            "circle-color": [
+                "interpolate",
+                ["linear"],
+                ["get", "count"],
+                1, "rgba(33,102,172,0)",
+                2, "rgb(0,255,255)",
+                3, "rgb(255,255,100)",
+                4, "rgb(255,0,0)"
+            ],
+            "circle-stroke-color": "white",
+            "circle-stroke-width": 1,
+            // Transition from heatmap to circle layer by zoom level
+            "circle-opacity": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                8, 0,
+                11, 1
+            ]
+        }
+    });
+});
+</script>
+
+</body>
+</html>
