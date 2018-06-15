@@ -33,3 +33,7 @@ python -m SimpleHTTPServer 8000
 ```
 
 - Open localhost:8000/map.html in your browser
+
+## This is what it looks like
+
+![Screenshot](https://user-images.githubusercontent.com/5750602/41453163-a60ba458-7042-11e8-90fb-e948fba61bb0.gif)
