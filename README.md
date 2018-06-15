@@ -1,4 +1,8 @@
 # Zipcode Heatmap
+
+
+![Screenshot](https://user-images.githubusercontent.com/5750602/41453163-a60ba458-7042-11e8-90fb-e948fba61bb0.gif)
+
 A Mapbox GL heatmap based on zipcodes
 
 Zipcde coordinates are from the [US Census]('http://www.census.gov/geo/maps-data/data/gazetteer.html')
@@ -17,6 +21,7 @@ const zipcodes = [
     },
    //... etc
 ]
+```
 
 ## Setup
 
@@ -26,7 +31,7 @@ const zipcodes = [
 
 - Run process.js
 
-- Run a simple server (to avoid cross origin issues)
+- Run a simple server (because CORS)
 
 ```
 python -m SimpleHTTPServer 8000
@@ -34,6 +39,3 @@ python -m SimpleHTTPServer 8000
 
 - Open localhost:8000/map.html in your browser
 
-## This is what it looks like
-
-![Screenshot](https://user-images.githubusercontent.com/5750602/41453163-a60ba458-7042-11e8-90fb-e948fba61bb0.gif)
