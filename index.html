@@ -122,9 +122,7 @@ map.on('load', function() {
 
     document.addEventListener('click', e => {
         if (e.target.classList.contains('opacity-toggle')) {
-            console.log(e);
             const opacity = map.getPaintProperty('zipcode-heat', 'heatmap-opacity');
-                console.log(`Opacity: ${opacity}`)
                 if (opacity === 1) {
                     map.setPaintProperty('zipcode-heat', 'heatmap-opacity', 0.65);
                     e.target.className = 'opacity-toggle';
@@ -156,28 +154,44 @@ map.on('load', function() {
                     6,
                     18,
                     10,
-                    20
+                    26,
                 ],
                 "heatmap-weight": [
                     "interpolate",
-                    [
-                        "exponential",
-                        1.005
+                    [ "exponential", 1.005],
+                    ["zoom"],
+                    6, [
+                        "interpolate",
+                        ["exponential", 1.005],
+                        ["get", "count"],
+                        0,
+                        0,
+                        1,
+                        0.05,
+                        246,
+                        0.25,
+                        491,
+                        0.5,
+                        700,
+                        1
                     ],
-                    [
-                        "get",
-                        "count"
+                    8, [
+                        "interpolate",
+                        ["exponential", 1.005],
+                        ["get", "count"],
+                        0,
+                        0,
+                        1,
+                        0.05,
+                        5,
+                        0.1,
+                        246,
+                        0.35,
+                        491,
+                        0.65,
+                        700,
+                        1
                     ],
-                    0,
-                    0,
-                    1,
-                    0.05,
-                    246,
-                    0.25,
-                    491,
-                    0.5,
-                    700,
-                    1
                 ],
                 "heatmap-color": [
                     "interpolate",
@@ -203,7 +217,7 @@ map.on('load', function() {
                     5,
                     1.75,
                     9,
-                    2.5
+                    10
                 ],
                 "heatmap-opacity": 1
             }
