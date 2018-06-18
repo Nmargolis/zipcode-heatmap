@@ -77,10 +77,17 @@ map.on('load', function() {
         "clusterRadius": 20 // Radius of each cluster when clustering points (defaults to 50)
     });
 
+    map.addSource('states', {
+        "type": "geojson",
+        "data": './data/stateData.geojson'
+    });
+
     const layersToToggle = {
         'zipcodes': ['zipcode-heat'],
         'affiliates-color': ['affiliates-counts', 'affiliates-clustered', 'affiliates-unclustered'],
-        'affiliates-white': ['affiliates-counts-white', 'affiliates-clustered-white', 'affiliates-unclustered-white']
+        'affiliates-white': ['affiliates-counts-white', 'affiliates-clustered-white', 'affiliates-unclustered-white'],
+        'city-labels': ['place-city-sm', 'place-city-lg-s', 'place-city-lg-n', 'place-city-md-s', 'place-city-md-n'],
+        'states': ['states']
     };
    
     Object.keys(layersToToggle).forEach(layerName => {
@@ -131,6 +138,36 @@ map.on('load', function() {
                     map.setPaintProperty('zipcode-heat', 'heatmap-opacity', 1);
                     e.target.className = 'opacity-toggle active';
                 }
+        }
+    })
+
+    map.addLayer({
+        "id": "states",
+        "type": "fill",
+        "source": "states",
+        "filter": [
+            "all",
+            [
+                "==",
+                "$type",
+                "Polygon"
+            ],
+            [
+                "in",
+                "name",
+                "California",
+                "Florida",
+                "Maryland",
+                "New Mexico",
+                "Texas"
+            ]
+        ],
+        "layout": {
+            "visibility": "visible"
+        },
+        "paint": {
+            "fill-color": "#f26122",
+            "fill-outline-color": "#fff"
         }
     })
 
