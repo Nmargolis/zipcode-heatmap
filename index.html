@@ -66,12 +66,12 @@ map.on('load', function() {
     // Heatmap layers also work with a vector tile source.
     map.addSource('zipcodes', {
         "type": "geojson",
-        "data": "/data/zipcodes.geojson",
+        "data": "./data/zipcodes.geojson",
     });
 
     map.addSource('affiliates', {
         "type": "geojson",
-        "data": "/data/affiliates.geojson",
+        "data": "./data/affiliates.geojson",
         "cluster": true,
         "clusterMaxZoom": 22, // Max zoom to cluster points on
         "clusterRadius": 20 // Radius of each cluster when clustering points (defaults to 50)
